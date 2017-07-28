@@ -9,3 +9,7 @@ For zip with multiple pictures upload
 1.Click "choose file" button, then select the zip file.
 2.Click "Submit" to confirm, then webpage will jump to another page automatically.
 3.In the new page, URLs of pictures in the zip will be shown.
+
+
+TODO:
+For the zip file part, need to find a good way to connect all the urls with the pictures
