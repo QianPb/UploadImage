@@ -1,0 +1,5 @@
+Upload a single image using node.js
+
+1.Click "choose file" button, then select the image that you want to upload. 
+2.Click "Submit" to confirm upload, then the webpage will show a link. 
+3.Click the link to access the image that you just uploaded.
