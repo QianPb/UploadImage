@@ -20,6 +20,7 @@ var fn;                          //filename
 var fnwithoutFi;                 //filename without Fieldname
 var filesInZip;                  //the name of files in zip file
 var links = {};                  //the urls of pictures in zip
+var imgs = {};
 
 
 var DecompressZip = require('decompress-zip');     // for unzip
@@ -86,32 +87,29 @@ router.post('/', upload.any(), function (req, res, next) {
             for(var i=0, j=0; i<filesInZip.length; i++){           // create urls for pictures
                 if ( filesInZip[i].substring(0,9) !== "__MACOSX/" ){
                     console.log(filesInZip[i]);
-                    links[j] = "http://localhost:3000/"+fnwithoutFi+"/"+filesInZip[i];
+                    links[j] = "http://localhost:3000/uploads/"+fnwithoutFi+"/"+filesInZip[i];
+                    imgs[j] = "/uploads/"+fnwithoutFi+"/"+filesInZip[i];
                     j++;
                 }
             }
         },1500);
         setTimeout(function () {      //pass the urls to another page to show the links
-            console.log(links);
+            console.log("links:"+links);
+            console.log("imgs:"+imgs);
             res.render('link2',{links:links})
         },2000)
     }
     else{                        // if the file uploaded is a single picture
-        res.render('link');
+        links[0] = "http://localhost:3000/uploads/"+fn
+        res.render('link2',{links:links});
     }
 });
 
-// //show the picture by http link ( zip file )
-// router.get('/'+fnwithoutFi+"/"+filesInZip[i], function (req, res, next) {
-//     console.log(fn);
-//     res.render('image', {img: '/uploads/'+fnwithoutFi+"/"+filesInZip[i]});
-// });
-
 //show the picture by http link ( a single image )
 
-router.get('/image', function (req, res, next) {
-    console.log(fn);
-    res.render('image', {img: '/uploads/'+fn});
-});
+// router.get('/image', function (req, res, next) {
+//     console.log(fn);
+//     res.render('image', {img: '/uploads/'+fn});
+// });
 
 module.exports = router;
