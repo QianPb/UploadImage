@@ -18,9 +18,8 @@ var upload = multer({ storage: storage })
 
 var fn;                          //filename
 var fnwithoutFi;                 //filename without Fieldname
-var filesInZip;
-var filesInZipClean = {};
-var links = {};
+var filesInZip;                  //the name of files in zip file
+var links = {};                  //the urls of pictures in zip
 
 
 var DecompressZip = require('decompress-zip');     // for unzip
@@ -47,7 +46,7 @@ function decompressfile(filename) {      //unzip the uploaded file and save to a
     });
 }
 
-function getnames() {
+function getnames() {                    // get all the names of files in the zip
     unzipper.on('error', function (err) {
         console.log('Caught an error');
     });
@@ -75,16 +74,16 @@ router.post('/', upload.any(), function (req, res, next) {
     console.log(fn);
     fnwithoutFi = fn.substring(0,fn.length-4);
     console.log(fnwithoutFi);
-    if(req.files[0].mimetype == "application/zip"){
+    if(req.files[0].mimetype == "application/zip"){       //if the file uploaded is a zip
         setTimeout(function(){
-            unzipper = new DecompressZip('public/uploads/'+fn);
+            unzipper = new DecompressZip('public/uploads/'+fn);   //unzip
             decompressfile(fnwithoutFi);
             },500);
         setTimeout(function () {
-            getnames();
+            getnames();                    // get names of files in zip
         },1200);
         setTimeout(function () {
-            for(var i=0, j=0; i<filesInZip.length; i++){
+            for(var i=0, j=0; i<filesInZip.length; i++){           // create urls for pictures
                 if ( filesInZip[i].substring(0,9) !== "__MACOSX/" ){
                     console.log(filesInZip[i]);
                     links[j] = "http://localhost:3000/"+fnwithoutFi+"/"+filesInZip[i];
@@ -92,12 +91,12 @@ router.post('/', upload.any(), function (req, res, next) {
                 }
             }
         },1500);
-        setTimeout(function () {
+        setTimeout(function () {      //pass the urls to another page to show the links
             console.log(links);
             res.render('link2',{links:links})
         },2000)
     }
-    else{
+    else{                        // if the file uploaded is a single picture
         res.render('link');
     }
 });
